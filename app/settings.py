@@ -38,6 +38,14 @@ class Settings(BaseSettings):
     # Frontend settings
     FRONTEND_URL: str
 
+    # Database Settings
+    DATABASE_NAME: str
+    DATABASE_USER: str
+    DATABASE_PASSWORD: str
+    DATABASE_HOST: str
+    DATABASE_PORT: str
+    DATABASE_DRIVER: str
+
     @property
     def get_allowed_origin_settings(self) -> dict:
         """
@@ -56,7 +64,7 @@ class Settings(BaseSettings):
         }
 
     @property
-    def get_database_settings(self) -> dict:
+    def get_database_string(self) -> dict:
         """
         Function to return database settings.
 
@@ -68,13 +76,7 @@ class Settings(BaseSettings):
                 - `host`: The host of the database.
                 - `port`: The port of the database.
         """
-        return {
-            "database": self.DATABASE_NAME,
-            "user": self.DATABASE_USER,
-            "password": self.DATABASE_PASSWORD,
-            "host": self.DATABASE_HOST,
-            "port": self.DATABASE_PORT,
-        }
+        return f"{self.DATABASE_DRIVER}://{self.DATABASE_USER}:{self.DATABASE_PASSWORD}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
 
     class Config:
         env_file = ".env"

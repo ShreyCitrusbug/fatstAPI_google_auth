@@ -29,6 +29,8 @@ logger = logging.getLogger()
 
 # Initiate Google OAuth2
 oauth = OAuth()
+
+# Initiate Google OAuth2
 oauth.register(
     name="google",
     client_id=settings.GOOGLE_CLIENT_ID,
@@ -95,6 +97,24 @@ async def auth_callback(code: str, request: Request):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid id_token: {str(e)}")
 
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
+
+
+@router.post("/login")
+async def login(request: Request):
+    """
+    ## API to handle user login.
+
+    ## Parameters:
+        `request`: The FastAPI request object.
+
+    ## Returns:
+        `RedirectResponse`: A redirect response to the welcome page.
+    """
+    try:
+        return RedirectResponse(url=settings.FRONTEND_URL, status_code=status.HTTP_200_OK)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")
